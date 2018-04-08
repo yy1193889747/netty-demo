@@ -36,7 +36,7 @@ public class EchoNettyServer {
                         }
                     });
             ChannelFuture f = b.bind().sync();
-            System.out.println(EchoNettyServer.class.getName() + "started and listen on " + f.channel().localAddress());
+            System.out.println(EchoNettyServer.class.getName() + " started and listen on " + f.channel().localAddress());
             f.channel().closeFuture().sync();
 
         }finally {
