@@ -8,8 +8,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ocly
@@ -28,21 +30,22 @@ public class EchoNettyClient {
         EventLoopGroup worker = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
-            b.group(worker).channel(NioSocketChannel.class).remoteAddress(new InetSocketAddress(host,port))
+            b.group(worker).channel(NioSocketChannel.class).remoteAddress(new InetSocketAddress(host, port))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel channel) throws Exception {
-                            channel.pipeline().addLast(new EchoClientHandler());
+                            channel.pipeline().addLast(new IdleStateHandler(4, 0, 0, TimeUnit.SECONDS))
+                                    .addLast(new EchoClientHandler());
                         }
                     });
             ChannelFuture f = b.connect().sync();
             f.channel().closeFuture().sync();
-        }finally {
+        } finally {
             worker.shutdownGracefully();
         }
     }
 
     public static void main(String[] args) throws Exception {
-        new EchoNettyClient("localhost",9999).start();
+        new EchoNettyClient("localhost", 9999).start();
     }
 }

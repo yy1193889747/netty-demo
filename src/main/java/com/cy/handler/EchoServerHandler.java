@@ -24,7 +24,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.READER_IDLE) {
                 loss_connect_time++;
-                System.out.println("5 秒没有接收到客户端的信息了");
+                System.out.println("10 秒没有接收到客户端的信息了");
                 if (loss_connect_time > 2) {
                     System.out.println("关闭这个不活跃的channel");
                     ctx.channel().close();
