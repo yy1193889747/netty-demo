@@ -34,7 +34,7 @@ public class EchoNettyClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel channel) throws Exception {
-                            channel.pipeline().addLast(new IdleStateHandler(4, 0, 0, TimeUnit.SECONDS))
+                            channel.pipeline().addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS))
                                     .addLast(new EchoClientHandler());
                         }
                     });
