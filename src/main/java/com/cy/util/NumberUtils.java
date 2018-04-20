@@ -20,7 +20,8 @@ public class NumberUtils {
 				| (0x000000ff00000000L & ((long) arr[index + 4] << 32))
 				| (0x00000000ff000000L & ((long) arr[index + 3] << 24))
 				| (0x0000000000ff0000L & ((long) arr[index + 2] << 16))
-				| (0x000000000000ff00L & ((long) arr[index + 1] << 8)) | (0x00000000000000ffL & (long) arr[index + 0]);
+				| (0x000000000000ff00L & ((long) arr[index + 1] << 8))
+				| (0x00000000000000ffL & (long) arr[index + 0]);
 		return ret;
 	}
 

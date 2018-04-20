@@ -20,7 +20,6 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     private int loss_connect_time = 0;
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-            super.userEventTriggered(ctx, evt);
         System.out.println("server");
     }
     @Override

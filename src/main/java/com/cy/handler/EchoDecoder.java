@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -15,13 +16,15 @@ public class EchoDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
+        // 包长度2
+        short pktSize =  in.readShortLE();
         // 消息类型2
-        byte[] msgTypeByte = new byte[2];
-        in.readBytes(msgTypeByte);
-        short msgType = NumberUtils.byte2Short4C(msgTypeByte);
+        short msgType =  in.readShortLE();
+        // 时间戳8
+        long l = in.readLongLE();
+        CharSequence charSequence = in.readCharSequence(3, StandardCharsets.UTF_8);
+        CharSequence charSequences = in.readCharSequence(32, StandardCharsets.UTF_8);
+        System.out.println(pktSize+"---"+msgType+"---"+in.readByte()+"---"+l+"---"+charSequence+"---"+charSequences);
 
-        if (msgType == 1) {
-            ctx.writeAndFlush(in);
-        }
     }
 }

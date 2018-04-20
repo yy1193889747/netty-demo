@@ -28,22 +28,19 @@ public class Transport {
             b.group(group).channel(NioSocketChannel.class).remoteAddress(new InetSocketAddress("localhost", 9999))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline();
                         }
                     });
             ChannelFuture future = b.connect().sync();
             ByteBuf buf = Unpooled.copiedBuffer("hello", CharsetUtil.UTF_8);
             ChannelFuture f = future.channel().writeAndFlush(buf);
-            f.addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                    if (channelFuture.isSuccess()) {
-                        System.out.println("send ok");
-                    } else {
-                        System.out.println("send false");
-                        channelFuture.cause().printStackTrace();
-                    }
+            f.addListener((ChannelFutureListener) channelFuture -> {
+                if (channelFuture.isSuccess()) {
+                    System.out.println("send ok");
+                } else {
+                    System.out.println("send false");
+                    channelFuture.cause().printStackTrace();
                 }
             });
         }finally {

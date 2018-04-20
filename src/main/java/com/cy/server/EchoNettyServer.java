@@ -1,5 +1,6 @@
 package com.cy.server;
 
+import com.cy.handler.EchoDecoder;
 import com.cy.handler.EchoServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -37,6 +38,7 @@ public class EchoNettyServer {
                         protected void initChannel(Channel channel) throws Exception {
                             // first heart check
                             channel.pipeline().addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
+                            channel.pipeline().addLast(new EchoDecoder());
                             channel.pipeline().addLast(new EchoServerHandler());
                         }
                     });
