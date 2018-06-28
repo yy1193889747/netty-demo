@@ -38,7 +38,6 @@ public class EchoNettyServer {
                         protected void initChannel(Channel channel) throws Exception {
                             // first heart check
                             channel.pipeline().addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
-                            channel.pipeline().addLast(new EchoDecoder());
                             channel.pipeline().addLast(new EchoServerHandler());
                         }
                     });
