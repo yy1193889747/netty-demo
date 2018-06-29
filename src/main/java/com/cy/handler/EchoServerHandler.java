@@ -6,12 +6,14 @@ import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
+import io.netty.util.concurrent.EventExecutor;
+
+import java.util.concurrent.*;
 
 /**
  * @author ocly
  * @date 2018/4/8 13:40
  */
-@ChannelHandler.Sharable
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     /**
      * 心跳检测
@@ -23,25 +25,13 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         String uuid = ctx.channel().id().asLongText();
         System.out.println("有用户连入:" + uuid);
-        long l = System.currentTimeMillis();
-        System.out.println("Server send: " + l);
         while (true) {
-            ByteBuf b = ctx.alloc().buffer();
-            b.writeLongLE(l);
-            ctx.writeAndFlush(b);
-        }
-    }
-
-    @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (IdleStateEvent.class.isAssignableFrom(evt.getClass())) {
-            IdleStateEvent e = (IdleStateEvent) evt;
-            Channel channel = ctx.channel();
-/*            if (e.state() == IdleState.READER_IDLE) {
-                // 读客户端心跳
-                System.out.println("超过10s没读到客户端心跳，断开连接");
-                channel.close();
-            }*/
+            ByteBuf buffer = ctx.alloc().buffer();
+            long l = System.currentTimeMillis();
+            buffer.writeLongLE(l);
+            ctx.writeAndFlush(buffer);
+            Thread.sleep(100);
+            System.out.println(ctx.isRemoved());
         }
     }
 
