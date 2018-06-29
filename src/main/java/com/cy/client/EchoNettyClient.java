@@ -48,7 +48,7 @@ public class EchoNettyClient {
             ChannelFuture f = b.connect().sync();
 
             ByteBuf buffer = f.channel().alloc().buffer();
-            // 写入登陆信息
+         /*   // 写入登陆信息
             buffer.writeShortLE(57);
             buffer.writeShortLE(100);
             buffer.writeZero(1);
@@ -62,7 +62,7 @@ public class EchoNettyClient {
             buffer.writeCharSequence(DigestUtils.md5Hex(sign), StandardCharsets.UTF_8);
             System.out.println(DigestUtils.md5Hex(sign));
 
-            f.channel().writeAndFlush(buffer);
+            f.channel().writeAndFlush(buffer);*/
             f.channel().closeFuture().sync();
         } finally {
             worker.shutdownGracefully();

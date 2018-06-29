@@ -2,6 +2,7 @@ package com.cy.server;
 
 import com.cy.handler.EchoDecoder;
 import com.cy.handler.EchoServerHandler;
+import com.cy.handler.EchoServerOutHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -28,11 +29,12 @@ public class EchoNettyServer {
 
     public void start() throws Exception {
 
-        EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
-            b.group(worker).channel(NioServerSocketChannel.class).localAddress(port)
+            b.group(worker)
+                    .channel(NioServerSocketChannel.class)
+                    .localAddress(port)
                     .childHandler(new ChannelInitializer<Channel>() {
                         @Override
                         protected void initChannel(Channel channel) throws Exception {
@@ -46,7 +48,7 @@ public class EchoNettyServer {
             f.channel().closeFuture().sync();
 
         }finally {
-            worker.shutdownGracefully();
+            worker.shutdownGracefully().sync();
         }
 
     }
